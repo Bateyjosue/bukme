@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_26_171624) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_26_182838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bus_photos", force: :cascade do |t|
+    t.string "image_url"
+    t.bigint "bus_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bus_id"], name: "index_bus_photos_on_bus_id"
+  end
 
   create_table "buses", force: :cascade do |t|
     t.string "plate_number"
@@ -28,6 +36,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_26_171624) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "trips", force: :cascade do |t|
+    t.date "trip_date"
+    t.string "source_gare"
+    t.string "destination_gare"
+    t.bigint "bus_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bus_id"], name: "index_trips_on_bus_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "full_name"
     t.string "email"
@@ -39,5 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_26_171624) do
     t.index ["role_id"], name: "index_users_on_role_id"
   end
 
+  add_foreign_key "bus_photos", "buses"
+  add_foreign_key "trips", "buses"
   add_foreign_key "users", "roles"
 end
