@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_26_182838) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_26_213419) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "books", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "trip_id", null: false
+    t.time "time"
+    t.integer "number_place"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["trip_id"], name: "index_books_on_trip_id"
+    t.index ["user_id"], name: "index_books_on_user_id"
+  end
 
   create_table "bus_photos", force: :cascade do |t|
     t.string "image_url"
@@ -57,6 +68,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_26_182838) do
     t.index ["role_id"], name: "index_users_on_role_id"
   end
 
+  add_foreign_key "books", "trips"
+  add_foreign_key "books", "users"
   add_foreign_key "bus_photos", "buses"
   add_foreign_key "trips", "buses"
   add_foreign_key "users", "roles"
